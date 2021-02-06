@@ -1,0 +1,105 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname listaCap3-ArthurHenriqueWiebusch-D) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp")) #f)))
+;;-------------------------------------1--------------------------------------
+
+;; calcula-hipotenusa: Número Número -> Número
+;; dados dois valores que representam dois catetos de um triângulo retângulo,
+;;     retorna a hipotenusa deste triângulo
+;; exemplos:
+;; (calcula-hipotenusa 3 4) = 5
+;; (calcula-hipotenusa 6 8) = 10
+;; (calcula-hipotenusa 5 12) = 13+
+(define (calcula-hipotenusa c1 c2)
+  (sqrt (+ (sqr c1) (sqr c2))))
+;; Testes
+(check-expect (calcula-hipotenusa 3 4) 5)
+(check-expect (calcula-hipotenusa 6 8) 10)
+(check-expect (calcula-hipotenusa 5 12) 13)
+
+;;-------------------------------------2--------------------------------------
+
+;; csb(calcula-salario-bruto): Número Número -> Número
+;; Dados o número de horas trabalhadas e o valor pago pela hora,
+;; calcula o salário bruto do funcionário
+;; exemplos:
+;;(csb 100 10) = 1000
+;;(csb 67 8) = 536
+;;(csb 80 15) = 1200
+(define (csb horas valor-hora)
+  (* horas valor-hora))
+;; Testes:
+(check-expect (csb 100 10) 1000)
+(check-expect (csb 67 8) 536)
+(check-expect (csb 110 15.5) 1705)
+
+;; cs(calcula-salario-líquido): Número Número Número -> Número
+;; Dados o número de horas trabalhadas, o valor pago pela hora e
+;; o imposto cobrado do trabalhador,
+;; calcula o salário líquido do funcionário
+;; exemplos:
+;;(csl 100 10) = 1000
+;;(csl 67 8) = 536
+;;(csl 80 15) = 1200
+(define (csl horas valor-hora imposto)
+  (- (csb horas valor-hora) (* (/ imposto 100) (csb horas valor-hora))))
+;; Testes:
+(check-expect (csl 100 10 10) 900)
+(check-expect (csl 67 8 15) 455.6)
+(check-expect (csl 110 15.5 11) 1517.45)
+
+;;-------------------------------------3--------------------------------------
+;; valor-final: Número Número Número Número -> Número
+;; dados o custo de uma mercadoria , o lucro sobre ela, a quantidade comprada
+;; e o desconto aplicado à mesma, calcula o valor final da compra para o cliente
+;; Exemplos:
+
+(define (valor-final custo lucro quantidade desconto)
+  (* (- 1 (/ desconto 100)) (valor-total custo lucro quantidade)))
+ 
+
+(define (valor-total custo lucro quantidade)
+  (* (valor-unitario custo lucro) quantidade))
+
+(define (custo-total custo quantidade)
+  (* custo quantidade
+  
+(define (valor-unitario custo lucro)
+  (* (+ 1 (/ lucro 100)) custo))
+
+;;-------------------------------------4--------------------------------------
+ 
+;; cvm(calcula-velocidade-média: Número Número Número Número -> Número
+;; Obj: Dadas as posições inicial e final (em quilômetros) e os tempos inicial
+;; e final (em horas), calcula a velocidade média do veículo
+;; Exemplos:
+(define (cvm posicao_inicial posicao_final tempo_inicial tempo_final)
+  (/
+   (- posicao_final posicao_inicial)
+   (- tempo_final tempo_inicial)))
+
+;;-------------------------------------5--------------------------------------
+;; cpf(calcula-posição-final): Número Número Número Número -> Número
+;; Dados a velocidade média de um veículo, sua posição inicial, e os intantes
+;; inicial e final de tempo, calcula a posição final deste veículo.
+;; Exemplos:
+(define (cpf velocidade_media posicao_inicial tempo_inicial tempo_final)
+  (+ (* velocidade_media (- tempo_final tempo_inicial)) + posicao_inicial))
+;;Testes:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

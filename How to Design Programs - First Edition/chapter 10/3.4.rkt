@@ -1,0 +1,142 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |3.4|) (read-case-sensitive #t) (teachpacks ((lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "draw.rkt" "teachpack" "htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "draw.rkt" "teachpack" "htdp")) #f)))
+;; a shape is either:
+;;   - (make-circle C P N)
+;;   - (make-rectangle C P N N)
+;; where C is a color,
+;;       P is a posn, and
+;;       N is a number.
+
+(define-struct circle (color center radius))
+(define-struct rectangle (color nw-corner width height))
+
+#|
+;; TEMPLATE
+(define (prog-for-shape a-shape)
+  (cond
+    [(circle? a-shape) 
+     (circle-color a-shape) ...
+     (circle-center a-shape) ...
+     (circle-radius a-shape) ...]
+    [(rectangle? a-shape)
+     (rectangle-color a-shape) ...
+     (rectangle-nw-corner a-shape) ...
+     (rectangle-width a-shape) ...
+     (rectangle-height a-shape) ...]))
+|#
+
+; -------------------------------------------------------------------------
+
+;; draw-shape : shape -> true
+;; draws a-shape
+(define (draw-shape a-shape)
+  (cond
+    [(circle? a-shape) 
+     (draw-circle
+      (circle-center a-shape)
+      (circle-radius a-shape)
+      (circle-color a-shape))]
+    [(rectangle? a-shape)
+     (draw-solid-rect 
+      (rectangle-nw-corner a-shape)
+      (rectangle-width a-shape)
+      (rectangle-height a-shape)
+      (rectangle-color a-shape))]))
+
+;; EXAMPLES AS TESTS
+(start 200 200)
+(draw-shape (make-circle 'red (make-posn 30 30) 20)) "should be" true
+(draw-shape (make-rectangle 'blue (make-posn 30 60) 20 50)) "should be" true
+
+; -------------------------------------------------------------------------
+
+;; translate-shape : shape number -> true
+;; translates a-shape by delta pixels in the X directions
+(define (translate-shape a-shape delta)
+  (cond
+    [(circle? a-shape) 
+     (make-circle      
+      (circle-color a-shape)
+      (make-posn (+ delta (posn-x (circle-center a-shape)))
+                 (posn-y (circle-center a-shape)))
+      (circle-radius a-shape))]
+    [(rectangle? a-shape)
+     (make-rectangle
+      (rectangle-color a-shape)
+      (make-posn (+ delta (posn-x (rectangle-nw-corner a-shape)))
+                 (posn-y (rectangle-nw-corner a-shape)))
+      (rectangle-width a-shape)
+      (rectangle-height a-shape))]))
+
+;; EXAMPLES AS TESTS
+(translate-shape (make-circle 'red (make-posn 30 30) 20) 10) "should be" 
+(make-circle 'red (make-posn 40 30) 20)
+(translate-shape (make-rectangle 'blue (make-posn 30 60) 20 50) 20) "should be" 
+(make-rectangle 'blue (make-posn 50 60) 20 50)
+
+; -------------------------------------------------------------------------
+
+;; clear-shape : shape -> true
+;; erases a-shape
+(define (clear-shape a-shape)
+  (cond
+    [(circle? a-shape) 
+     (draw-circle
+      (circle-center a-shape)
+      (circle-radius a-shape)
+      'white)]
+    [(rectangle? a-shape)
+     (draw-solid-rect 
+      (rectangle-nw-corner a-shape)
+      (rectangle-width a-shape)
+      (rectangle-height a-shape)
+      'white)]))
+
+;; EXAMPLES AS TESTS
+(start 200 200)
+(draw-shape (make-circle 'red (make-posn 30 30) 20)) "should be" true
+(draw-shape (make-rectangle 'blue (make-posn 30 60) 20 50)) "should be" true
+(clear-shape (make-circle 'red (make-posn 30 30) 20)) "should be" true
+(clear-shape (make-rectangle 'blue (make-posn 30 60) 20 50)) "should be" true
+
+; -------------------------------------------------------------------------
+
+
+;; A list-of-shapes is either:
+;;  - empty, or
+;;  - (cons shape list-of-shapes)
+
+#|
+;; TEMPLATE
+(define (prog-for-losh a-los)
+  (cond
+    [(empty? a-los) ...]
+    [else (first a-los) ...
+          (prog-for-losh (rest a-los))..]))
+|#
+
+(define FACE
+  (cons (make-circle 'red (make-posn 50 50) 50)
+        (cons (make-rectangle 'blue (make-posn 30 20) 10 10)
+              (cons (make-rectangle 'blue (make-posn 65 20) 10 10)
+                    (cons (make-rectangle 'blue (make-posn 40 75) 10 10)
+                          (cons (make-rectangle 'blue (make-posn 40 75) 25 10)
+                                (cons (make-rectangle 'blue (make-posn 45 35) 15 30)
+                                      empty)))))))
+
+; -------------------------------------------------------------------------
+
+;; clear-losh : list-of-shapes -> true
+;; clear each shape on a-los
+(define (clear-losh a-los)
+  (cond
+    [(empty? a-los) true]
+    [else (and (clear-shape (first a-los))
+               (clear-losh (rest a-los)))]))
+
+;; EXAMPLES AS TESTS
+(start 100 100)
+(draw-shape (make-circle 'red (make-posn 50 50) 40)) "should be" true
+(clear-losh empty) "should be" true
+(clear-losh (cons (make-circle 'red (make-posn 50 50) 40) empty)) "should be" true

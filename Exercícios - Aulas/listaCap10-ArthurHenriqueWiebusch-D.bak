@@ -1,0 +1,83 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname listaCap10-ArthurHenriqueWiebusch-D) (read-case-sensitive #t) (teachpacks ((lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp")) #f)))
+
+;; -----------------
+;; TIPO CARTA-NUMERO:
+;; -----------------
+(define-struct carta-numero (cor valor))
+;; Um elemento do conjunto Carta-numero é
+;; (make-carta-numero c v) onde
+;; c : String, é a cor da carta, que pode ser "azul", "verde", "amarelo" ou "vermelho"
+;; v : Número, é o número da carta
+(define carta2azul (make-carta-numero "azul" 2))
+(define carta7vermelha (make-carta-numero "vermelho" 7))
+(define carta5amarela (make-carta-numero "amarelo" 5))
+(define carta8verde (make-carta-numero "verde" 8))
+
+
+;; -----------------
+;; TIPO CARTA-ESPECIAL:
+;; -----------------
+(define-struct carta-especial (cor tipo))
+;; Um elemento do conjunto Carta-especial é
+;; (make-carta-especial c t) onde
+;; c : String, é a cor da carta, que pode ser "azul", "verde", "amarelo", "vermelho" ou "qualquer"
+;; t : String, é o tipo da carta especial, que pode ser "Compra4", "Compra2", "Inverte", "PulaVez" e "TrocaCor"
+(define cartaCompra4 (make-carta-especial ("qualquer" "Compra4")))
+(define cartaCompra2azul (make-carta-especial ("azul" "Compra2")))
+(define cartaInverteVerde (make-carta-especial ("verde" "Inverte")))
+(define cartaPulaVezVermelha (make-carta-especial ("vermelho" "PulaVez")))
+(define cartaTrocaCor (make-carta-especial ("qualquer" "TrocaCor")))
+
+;; -----------
+;; TIPO CARTA:
+;; -----------
+;; Um elemento do conjunto Carta pode ser
+;; 1. um elemento do conjunto Carta-numero;
+;; 2. um elemento do conjunto Carta-especial
+
+;; ===============================================================================
+;; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+;; ===============================================================================
+
+;; Uma ListaDeCartas é
+;; 1. A lista vazia (empty); ou
+;; 2. (cons c l), onde:
+;; c: Carta
+;; l: ListaDeCartas
+(define lista1 empty)
+(define lista2 (cons cartaCompra4 empty))
+(define lista3 (cons carta2azul
+                     (cons cartaCompra2azul
+                           (cons carta8verde
+                                 (cons cartaCompra2azul empty)))))
+(define lista4 (cons cartaTrocaCor
+                     (cons cartaPulaVezVermelha
+                           (cons carta5amarela
+                                 (cons carta7vermelha
+                                       (conscartaInverteVerde))))))
+
+;; -----------------
+;; TIPO JOGADOR:
+;; -----------------
+(define-struct jogador (nome mão pontuação))
+;; Um elemento do conjunto Jogador é
+;; (make-jogador n m p) onde
+;; n: String, representa o nome do jogador
+;; m: ListaDeCartas, representa as cartas da mão do jogador
+;; p: Número, representa a pontuação do jogador (soma dos pontos das cartas na sua mão)
+(define jogador1 (make-jogador "Julio" lista3 
+
+
+;; ===============================================================================
+;; 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+;; ===============================================================================
+
+;; insere-carta: Jogador Carta -> Jogador
+
+
+
+
+
+

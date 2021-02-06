@@ -1,0 +1,71 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex27_aprovado) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "draw.rkt" "teachpack" "htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "draw.rkt" "teachpack" "htdp")) #f)))
+;; mediaFinal: Número Número Número -> Número
+;; dadas a nota da prova 1, a nota da prova 2 e a nota da lista de exercícios,
+;; calcula a média final do aluno
+;; Exemplos:
+;; (mediaFinal 8 8 8) = 8
+;; (mediaFinal 9 7 8) = 7.9
+;; (mediaFinal 6 8 4) = 6.8
+(define (mediaFinal p1 p2 e)
+  (+ (* p1 0.4) (* p2 0.5) (* e 0.1)))
+;; Testes:
+(check-expect (mediaFinal 8 8 8) 8)
+(check-expect (mediaFinal 9 7 8) 7.9)
+(check-expect (mediaFinal 6 8 4) 6.8)
+
+;; conceitoFinal: Número Número Número Número -> Símbolo
+;; dadas a nota das provas 1 e 2, a nota dos exercicios e a frequencia de um
+;; aluno, retorna um simbolo representando o conceito final do aluno
+;; Exemplos:
+;; (conceitoFinal 8 8 8 100) = 'B
+;; (conceitoFinal 9 9 9 100) = 'A
+;; (conceitoFinal 2 6 4 70) = 'FF
+;; (conceitoFinal 6 8 4 90) = 'C
+;; (conceitoFinal 4 5 3 80) = 'D
+(define (conceitoFinal p1 p2 e f)
+  (cond
+    [(< f 75) 'FF]
+    [(< (mediaFinal p1 p2 e) 6) 'D]
+    [(< (mediaFinal p1 p2 e) 7.5) 'C]
+    [(< (mediaFinal p1 p2 e) 9) 'B]
+    [else 'A]))
+;; Testes:
+(check-expect (conceitoFinal 8 8 8 100) 'B)
+(check-expect (conceitoFinal 9 9 9 100) 'A)
+(check-expect (conceitoFinal 2 6 4 70) 'FF)
+(check-expect (conceitoFinal 6 8 4 90) 'C)
+(check-expect (conceitoFinal 4 5 3 80) 'D)
+
+;; aprovado?: simbolo -> string
+;; dado um simbolo representando o conceito do aluno, retorna uma string
+;; informando se o aluno foi aprovado ou reprovado e caso tenha sido reprovado,
+;; informa ainda o motivo da reprovação (frequência ou nota)
+;; Exemplos:
+;; (aprovado? (conceitoFinal 8 8 8 100)) = "aprovado com B"
+;; (aprovado? (conceitoFinal 9 9 9 100)) = "Aprovado com A"
+;; (aprovado? (conceitoFinal 2 6 4 70)) = "Reprovado por falta de frequência"
+;; (aprovado? (conceitoFinal 6 8 4 90)) = "Aprovado com C"
+;; (aprovado? (conceitoFinal 4 5 3 80)) = "Reprovado por nota insuficiente"
+(define (aprovado? conceito)
+  (cond
+    [(symbol=? conceito 'D) "Reprovado por nota insuficiente"]
+    [(symbol=? conceito 'FF) "Reprovado por falta de frequência"]
+    [(symbol=? conceito 'A) "Aprovado com A"]
+    [(symbol=? conceito 'B) "Aprovado com B"]
+    [else "Aprovado com C"]))
+;; Testes:
+(check-expect (aprovado? (conceitoFinal 8 8 8 100)) "Aprovado com B")
+(check-expect (aprovado? (conceitoFinal 9 9 9 100)) "Aprovado com A")
+(check-expect (aprovado? (conceitoFinal 2 6 4 70)) "Reprovado por falta de frequência")
+(check-expect (aprovado? (conceitoFinal 6 8 4 90)) "Aprovado com C")
+(check-expect (aprovado? (conceitoFinal 4 5 3 80)) "Reprovado por nota insuficiente")
+
+
+
+
+
+
+
+

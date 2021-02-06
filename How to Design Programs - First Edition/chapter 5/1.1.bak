@@ -1,0 +1,42 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |1.1|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp")) #f)))
+;; reply : symbol -> symbol
+;; to determine a reply for the greeting s
+(define (reply s)
+  (cond
+    [(symbol=? s 'GoodMorning) 'Hi]
+    [(symbol=? s 'HowAreYou?) 'Fine]
+    [(symbol=? s 'GoodAfternoon) 'INeedANap]
+    [(symbol=? s 'GoodEvening) 'BoyAmITired]))
+
+(reply 'HowAreYou?) 
+"should be"
+(cond
+  [(symbol=? 'HowAreYou? 'GoodMorning) 'Hi]
+  [(symbol=? 'HowAreYou? 'HowAreYou?) 'Fine]
+  [(symbol=? 'HowAreYou? 'GoodAfternoon) 'INeedANap]
+  [(symbol=? 'HowAreYou? 'GoodEvening) 'BoyAmITired])
+"should be"
+(cond
+  [false 'Hi]
+  [(symbol=? 'HowAreYou? 'HowAreYou?) 'Fine]
+  [(symbol=? 'HowAreYou? 'GoodAfternoon) 'INeedANap]
+  [(symbol=? 'HowAreYou? 'GoodEvening) 'BoyAmITired])
+"should be"
+(cond
+  [(symbol=? 'HowAreYou? 'HowAreYou?) 'Fine]
+  [(symbol=? 'HowAreYou? 'GoodAfternoon) 'INeedANap]
+  [(symbol=? 'HowAreYou? 'GoodEvening) 'BoyAmITired])
+"should be"
+(cond
+  [true 'Fine]
+  [(symbol=? 'HowAreYou? 'GoodAfternoon) 'INeedANap]
+  [(symbol=? 'HowAreYou? 'GoodEvening) 'BoyAmITired])
+"should be"
+'Fine
+
+(symbol=? (reply 'GoodMorning) 'Hi)
+(symbol=? (reply 'HowAreYou?) 'Fine)
+(symbol=? (reply 'GoodAfternoon) 'INeedANap)
+(symbol=? (reply 'GoodEvening) 'BoyAmITired)

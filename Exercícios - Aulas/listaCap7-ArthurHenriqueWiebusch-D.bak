@@ -1,0 +1,224 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname listaCap7-ArthurHenriqueWiebusch-D) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "draw.rkt" "teachpack" "htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "draw.rkt" "teachpack" "htdp")) #f)))
+;; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
+;; -----------------
+;; TIPO CARTA-NUMERO:
+;; -----------------
+(define-struct carta-numero (cor valor))
+;; Um elemento do conjunto Carta-valor tem o formato:
+;; (make-carta-numero c v) onde:
+;; c : String, é a cor da carta, que pode ser "azul", "verde", "amarelo" ou
+;; "vermelho"
+;; v : Número, representa o valor da carta, que pode ser um numero entre 0 e 9
+;; (inclusive)
+;; Exemplos de elementos do conjunto carta-numero:
+(define carta-vermelha (make-carta-numero "vermelho" 2))
+(define carta-vermelha2 (make-carta-numero "vermelho" 5))
+(define carta-azul (make-carta-numero "azul" 5))
+(define carta-verde (make-carta-numero "verde" 9))
+(define carta-amarela (make-carta-numero "amarelo" 3))
+
+;; -----------------
+;; TIPO CARTA-ESPECIAL:
+;; -----------------
+(define-struct carta-especial (cor tipo))
+;; Um elemento do conjunto Carta-especial tem o formato:
+;; (make-carta-especial c t) onde
+;; c : String, é a cor da carta, que pode ser "azul", "verde", "amarelo",
+;; "vermelho" ou "qualquer"
+;; t : String, representa o tipo da carta, que pode ser "Compra4", "Compra2",
+;; "Inverte", "PulaVez" ou "TrocaCor"
+;; Exemplos de elementos do conjunto carta-especial:
+(define carta-compra4 (make-carta-especial "qualquer" "Compra4"))
+(define carta-compra2-azul (make-carta-especial "azul" "Compra2"))
+(define carta-compra2-verde (make-carta-especial "verde" "Compra2"))
+(define carta-inverte-verde (make-carta-especial "verde" "Inverte"))
+(define carta-troca-cor (make-carta-especial "qualquer" "TrocaCor"))
+
+
+;; -----------
+;; TIPO CARTA:
+;; -----------
+;; Um elemento do conjunto Carta é
+;; 1. um elemento do conjunto carta-especial; ou
+;; 2. um elemento do conjunto carta-numero;
+
+;; os exemplos dos conjuntos carta-especial e carta-numero, podem ser
+;; considerados como exemplos do conjunto carta
+
+;; ==============================================================================
+;; 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+;; ==============================================================================
+
+;; cor-ingles: string -> string
+;; dada uma cor em português, retorna esta cor em ingles
+;; Exemplos:
+;; (cor-ingles "azul") = "blue"
+;; (cor-ingles "vermelho") = "red"
+;; (cor-ingles "verde") = "green"
+;; (cor-ingles "amarelo") = "yellow"
+;; (cor-ingles "qualquer") = "black"
+(define (cor-ingles cor)
+  (cond
+    [(string=? cor "azul") "blue"]
+    [(string=? cor "vermelho") "red"]
+    [(string=? cor "verde") "green"]
+    [(string=? cor "amarelo") "yellow"]
+    [(string=? cor "qualquer") "black"]))
+;; Testes:
+(check-expect (cor-ingles "azul") "blue")
+(check-expect (cor-ingles "vermelho") "red")
+(check-expect (cor-ingles "verde") "green")
+(check-expect (cor-ingles "amarelo") "yellow")
+(check-expect (cor-ingles "qualquer") "black")
+
+;; cor?: carta -> string
+;; dada uma carta devolve sua cor
+;; Exemplos:
+;; (cor? carta-vermelha) = "vermelho"
+;; (cor? carta-azul) = "azul"
+;; (cor? carta-verde) = "verde"
+;; (cor? carta-amarela) = "amarelo"
+;; (cor? carta-compra4) = "qualquer"
+(define (cor? carta)
+  (cond
+    [(carta-numero? carta) (carta-numero-cor carta)]
+    [(carta-especial? carta) (carta-especial-cor carta)]))
+;; Testes:
+(check-expect (cor? carta-vermelha) "vermelho")
+(check-expect (cor? carta-azul) "azul")
+(check-expect (cor? carta-verde) "verde")
+(check-expect (cor? carta-amarela) "amarelo")
+(check-expect (cor? carta-compra4) "qualquer")
+
+
+;; carta-cor: carta -> string
+;; dada uma carta, retorna a cor desta carta em ingles
+;; Exemplos:
+;; (carta-cor carta-azul) = "blue"
+;; (carta-cor carta-vermelha) = "red"
+;; (carta-cor carta-verde) = "green"
+;; (carta-cor carta-amarela) = "yellow"
+;; (carta-cor carta-compra4) = "black"
+(define (carta-cor carta)
+  (cor-ingles (cor? carta)))
+;; Testes:
+(check-expect (carta-cor carta-azul) "blue")
+(check-expect (carta-cor carta-vermelha) "red")
+(check-expect (carta-cor carta-amarela) "yellow")
+(check-expect (carta-cor carta-verde) "green")
+(check-expect (carta-cor carta-compra4) "black")
+
+;; ==============================================================================
+;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+;; ==============================================================================
+
+;; Um elemento do conjunto cartaString é
+;; 1. Um elemento do conjunto carta; ou
+;; 2. Um elemento do conjunto string;
+
+;; jogada-valida: carta cartaString -> booleano
+;; dada uma carta que está na mesa e uma carta na mão do jogado, verifica se
+;; a carta que está na mão do jogador pode ser jogada, configurando uma jogada
+;; válida,(levando em conta as regras do jogo UNO)
+;; se sim a função devolve true, caso contrário, devolve false
+;; Exemplos:
+;; (jogada-valida carta-verde carta-azul) = false
+;; (jogada-valida carta-compra4 carta-azul) = true
+;; (jogada-valida carta-compra2-azul carta-azul) = true
+;; (jogada-valida carta-compra2-azul carta-verde) = false
+(define (jogada-valida carta-mesa carta-mao)
+  (cond
+    ;; caso a carta-mao seja um string, devolve falso
+    [(string? carta-mao) false]
+    ;; caso contrario, testa a jogada
+    [else 
+     (cond
+       ;; se a cor das cartas forem iguais, a jogada sempre é válida
+       [(string=? (cor? carta-mesa) (cor? carta-mao)) true]
+       ;; se uma das cartas tem a cor qualquer, a jogada é sempre válida
+       [(or (string=? "qualquer" (cor? carta-mesa))
+            (string=? "qualquer" (cor? carta-mao))) true]
+       ;; se as cartas são carta-numero e tem o mesmo valor retorna verdadeiro
+       [(and (carta-numero? carta-mesa) (carta-numero? carta-mao))
+        (= (carta-numero-valor carta-mesa) (carta-numero-valor carta-mao))]
+       ;; se as cartas são carta-especial e tem o mesmo tipo retorna verdadeiro
+       [(and (carta-especial? carta-mesa) (carta-especial? carta-mao))
+        (string=? (carta-especial-tipo carta-mesa)
+                  (carta-especial-tipo carta-mao))]
+       ;; caso contrario retorna false
+       [else false])]))
+;; Testes:
+(check-expect (jogada-valida carta-verde carta-azul) false)
+(check-expect (jogada-valida carta-compra4 carta-azul) true)
+(check-expect (jogada-valida carta-compra2-azul carta-azul) true)
+(check-expect (jogada-valida carta-compra2-azul carta-compra2-verde) true)
+(check-expect (jogada-valida carta-verde carta-amarela) false)
+(check-expect (jogada-valida carta-compra4 carta-inverte-verde) true)
+(check-expect (jogada-valida carta-verde carta-inverte-verde) true)
+(check-expect (jogada-valida carta-verde carta-troca-cor) true)
+(check-expect (jogada-valida carta-verde "vazia") false)
+    
+;; ==============================================================================
+;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+;; ==============================================================================
+
+;; -----------------
+;; TIPO MÃO
+;; -----------------
+(define-struct Mão (carta1 carta2 carta3 carta4 carta5))
+;; Um elemento do conjunto Mão tem o formato:
+;; (make-Mão c1 c2 c3 c4 c5) onde:
+;; c1: cartaString, pode ser uma carta, ou a string "livre"
+;; c2: cartaString, pode ser uma carta, ou a string "livre"
+;; c3: cartaString, pode ser uma carta, ou a string "livre"
+;; c4: cartaString, pode ser uma carta, ou a string "livre"
+;; c5: cartaString, pode ser uma carta, ou a string "livre"
+;; Exemplos de elementos do conjunto Mão:
+(define Mão1 (make-Mão carta-compra2-azul
+                       carta-verde
+                       carta-amarela
+                       carta-azul
+                       carta-compra4))
+(define Mão2 (make-Mão carta-azul
+                       carta-vermelha
+                       carta-inverte-verde
+                       carta-compra2-verde
+                       carta-compra2-azul))
+
+;; ==============================================================================
+;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+;; ==============================================================================
+
+;; define-jogada: Mão carta -> cartaString
+;; dada uma Mão e uma carta da mesa, devolve uma carta da mão que pode ser jogada
+;; sobre esta carta da mesa. Se não houver nenhuma carta que possa ser jogada
+;; retorna "Jogada impossível"
+;; Exemplos:
+;; (define-jogada Mão2 carta-amarela) = "Jogada impossível"
+;; (define-jogada Mão2 carta-compra2-azul) = carta-azul
+;; (define-jogada Mão2 carta-vermelha) = carta-vermelha
+;; (define-jogada Mão1 carta-amarela) = carta-amarela
+;; (define-jogada Mão1 carta-vermelha2) = carta-azul
+;; (define-jogada Mão1 carta-vermelha) = (carta-compra4)
+(define (define-jogada mão carta-mesa)
+  (cond
+    [(jogada-valida (Mão-carta1 mão) carta-mesa) (Mão-carta1 mão)]
+    [(jogada-valida (Mão-carta2 mão) carta-mesa) (Mão-carta2 mão)]
+    [(jogada-valida (Mão-carta3 mão) carta-mesa) (Mão-carta3 mão)]
+    [(jogada-valida (Mão-carta4 mão) carta-mesa) (Mão-carta4 mão)]
+    [(jogada-valida (Mão-carta5 mão) carta-mesa) (Mão-carta5 mão)]
+    [else "Jogada impossível"]))
+;; Testes:
+(check-expect (define-jogada Mão2 carta-amarela) "Jogada impossível")
+(check-expect (define-jogada Mão2 carta-compra2-azul) carta-azul)
+(check-expect (define-jogada Mão2 carta-vermelha) carta-vermelha)
+(check-expect (define-jogada Mão1 carta-amarela) carta-amarela)
+(check-expect (define-jogada Mão1 carta-vermelha2) carta-azul)
+(check-expect (define-jogada Mão1 carta-vermelha) carta-compra4)
+
+
+
+

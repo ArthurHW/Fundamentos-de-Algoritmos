@@ -1,0 +1,42 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Prova2) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp")) #f)))
+(define-struct artigo (titulo autores texto))
+
+;; Um artigo do conjunto Artigo é uma estrutura
+;; (make-artigo t aut txt)
+;; onde t : Simbolo, é o título do artigo;
+;; aut : Lista-de-simbolos , é a lista de autores do artigo; e
+;; txt : Texto-cientifico, é o texto do artigo.
+
+;; Uma Lista-de-simbolos é
+;; 1) empty ou
+;; 2) (cons s ls), onde s é Simbolo e ls é Lista-de-símbolos
+
+;; Um Texto-cientifico é
+;; 1) empty, ou
+;; 2) (cons s tc), onde s é um Símbolo e tc é do tipo Texto-científico;
+;; 3) (cons a tc), onde a é um Artigo, e tc é do tipo Texto-cientifico.
+
+
+;; a)
+
+
+(define A1 (make-artigo 'EraDigital (list 'eu) empty))
+(define A2 (make-artigo 'VicioEmJogos (list 'eu 'e 'mais 'um) (list A1)))
+
+(define TC1 (list A2 'Is 'A 'Disease))
+(define TC2 (list TC1 A1 'Problema 'da 'modernidade))
+
+
+;; b)
+
+
+;; ocorrencias: Artigo Simbolo -> Numero
+;; Dado um artigo e um síbolo, retorna o numero de ocorrencias deste simbolo no artigo e nos
+;; subartigos
+;; Exemplos:
+(define (ocorrencias artigo simbolo)
+  (cond
+    
+

@@ -1,0 +1,78 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |1.3|) (read-case-sensitive #t) (teachpacks ((lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp") (lib "guess.rkt" "teachpack" "htdp") (lib "master.rkt" "teachpack" "htdp") (lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp")) #f)))
+;; Language: Intermediate Student
+
+;; STRUCTURE DEFINITION: parent
+
+(define-struct parent (c name dob eyes))
+
+;; DATA DEFINITIONS
+;; ----------------
+;;  parent
+;;  list-of-children
+;; -----------------
+;; A parent is a structure
+;;
+;;  (make-parent c name dob eyes)
+;;
+;; where c is a list of children, name and eyes are symbols, and dob is a number.
+;; ------------------------------------------------------------------------------
+;; A list-of-children is either
+;;
+;;  empty, or
+;;  (cons p c)
+;;
+;; where p is a parent and c is a list of children.
+;; ------------------------------------------------
+
+;; VARIABLE DEFINITIONS
+;; --------------------
+(define Jango (make-parent empty 'Jango 2010 'blue))
+ 
+(define Jennifer-Gustav (list Jango))
+(define Jennifer (make-parent Jennifer-Gustav 'Jennifer 1988 'purple))
+(define Gustav (make-parent Jennifer-Gustav 'Gustav 1988 'brown))
+ 
+(define Fred-Eva (list Gustav))
+(define Fred (make-parent Fred-Eva 'Fred 1965 'pink))
+ 
+(define Eva (make-parent Fred-Eva 'Eva 1965 'blue))
+(define Dave (make-parent empty 'Dave 1955 'black))
+(define Adam (make-parent empty 'Adam 1950 'yellow))
+ 
+(define Carl-Bettina (list Adam Dave Eva))
+(define Carl (make-parent Carl-Bettina 'Carl 1926 'green))
+(define Bettina (make-parent Carl-Bettina 'Bettina 1926 'green))
+ 
+;; count-descendants : parent -> number
+;; consumes a parent p
+;; produces the number otf nodes in the tree that has p as its root
+;; including p
+(define (count-descendants p)
+  (+ 1 (count-children (parent-c p))))
+
+;; examples as tests
+(check-expect (count-descendants Eva) 3)
+(check-expect (count-descendants Carl) 6)
+
+;; count-children : list-of-children -> number
+;; consumes a list-of-children c
+;; produces the number of parents in c
+(define (count-children c)
+  (cond
+    [(empty? c) 0]
+    [else (+ (count-descendants (first c)) (count-children (rest c)))]))
+
+(check-expect (count-children empty) 0)
+(check-expect (count-children (list Dave)) 1)
+
+;; count-proper-descendants : parent -> number
+;; consumes a parent p
+;; produces the number of p's descendants (sub-nodes of p)
+(define (count-proper-descendants p)
+  (count-children (parent-c p)))
+
+;; examples as tests
+(check-expect (count-proper-descendants Eva) 2)
+(check-expect (count-proper-descendants Carl) 5)

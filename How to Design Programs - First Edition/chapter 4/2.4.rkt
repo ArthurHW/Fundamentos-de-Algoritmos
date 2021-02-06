@@ -1,0 +1,35 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |2.4|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "convert.rkt" "teachpack" "htdp")) #f)))
+;; 1.
+;; f : number -> boolean
+;; to determine if n is a solution to the equation:
+;;  4*n + 2 = 62
+(define (f n)
+  (= (+ (* 4 n) 2) 62))
+
+(check-expect (f 10) #false)
+(check-expect (f 12) #false)
+(check-expect (f 14) #false)
+
+;; 2.
+;; g : number -> boolean
+;; to determine if n is a solution to the equation:
+;;  2*(n^2) = 102
+(define (g n)
+  (= (* 2 n n) 102))
+
+(check-expect (g 10) #false)
+(check-expect (g 12) #false)
+(check-expect (g 14) #false)
+
+;; 3.
+;; h : number -> boolean
+;; to determine if n is a solution to the equation:
+;;  4*(n^2) + 6*n + 2 = 462
+(define (h n)
+  (= (+ (* 4 n n) (* 6 n) 2) 462))
+
+(check-expect (h 10) #true)
+(check-expect (h 12) #false)
+(check-expect (h 14) #false)
